@@ -61,17 +61,25 @@ int main(int argc, char * argv[])
     
     int buff_len = strlen(buff);
     // separate index for the shift value
-    int offset_ind = 0;
+    int offset_ind = 0, shift = 0;
     for (int i = 0; i < buff_len; i++)
     {
         // if char in user entry is alphabetic then shift else ignore and move to next
         if isalpha(buff[i])
         {
+            //  check that shifted char does not go out of range in terms of acsii vals
+            shift = (int)buff[i] + num_key[offset_ind];
+            if (islower(buff[i]))
+            {
+                shift = shift > 122 ? shift - 26 : shift;
+            } else {
+                shift = shift > 90 ? shift - 26 : shift;
+            }
+            // assign shifted char back to user input
+            buff[i] = shift;
+            
             // loop round the shift array using the modulus of the index with the shift length
             offset_ind = (offset_ind + 1) % arg_len;
-            
-            //  need to add in bounds to this as can make Z or z go out of bounds
-            buff[i] = (int)buff[i] + num_key[offset_ind];
         } 
     }
     
